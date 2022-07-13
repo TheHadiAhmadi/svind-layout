@@ -1,5 +1,5 @@
 <script>
-	import { getContext, onMount } from 'svelte';
+	import { getContext, onDestroy, onMount } from 'svelte';
 
 	import Navbar from './Navbar.svelte';
 
@@ -12,6 +12,11 @@
     $: fixed = layout.fixed
 
 	$: layout.registerSidebar(mode);
+
+onDestroy(() => {
+    layout.removeSidebar()
+})
+
 </script>
 
 <Navbar vertical fixed={$fixed} class="sidebar-{mode}">

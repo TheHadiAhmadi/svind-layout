@@ -1,13 +1,21 @@
 <script>
-import { getContext, onMount } from "svelte";
+import { getContext, onDestroy, onMount } from "svelte";
 
 import Navbar from "./Navbar.svelte";
 
 const layout = getContext('layout')
 
-layout.registerHeader()
+onMount(() => {
+    layout.registerHeader()
+})
+
+
+onDestroy(() => {
+    layout.removeHeader()
+})
 
 $: fixed = layout.fixed;
+
  
 </script>
 <Navbar fixed={$fixed}>

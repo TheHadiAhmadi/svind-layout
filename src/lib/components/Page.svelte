@@ -14,10 +14,17 @@ import { writable } from 'svelte/store';
 		hasSidebar = mode;
 	}
 
+    function removeSidebar() {
+        hasSidebar = null
+    }
+    function removeHeader() {
+        hasHeader = null
+    }
+
     const fixedStore = writable(fixed)
 
     $: $fixedStore = fixed
-	setContext('layout', { registerHeader, registerSidebar, fixed: fixedStore });
+	setContext('layout', { removeSidebar, removeHeader, registerHeader, registerSidebar, fixed: fixedStore });
 </script>
 
 <div class="d-page" class:dark data-layout-sidebar={hasSidebar} data-layout-header={hasHeader}>
