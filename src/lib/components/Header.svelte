@@ -3,6 +3,11 @@ import { getContext, onDestroy, onMount } from "svelte";
 
 import Navbar from "./Navbar.svelte";
 
+let className = '';
+export {className as class}
+
+export let height = 80;
+
 const layout = getContext('layout')
 
 onMount(() => {
@@ -18,6 +23,6 @@ $: fixed = layout.fixed;
 
  
 </script>
-<Navbar fixed={$fixed}>
+<Navbar {height} class={className} fixed={$fixed}>
     <slot/>
 </Navbar>

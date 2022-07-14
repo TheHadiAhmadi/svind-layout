@@ -6,6 +6,9 @@
     /** @type {'compact'|'icon'|'default'}*/
     export let mode = 'default';
 
+	export let width = 240;
+	export let top = 80;
+
 	const layout = getContext('layout');
     
 
@@ -19,6 +22,6 @@ onDestroy(() => {
 
 </script>
 
-<Navbar vertical fixed={$fixed} class="sidebar-{mode}">
+<Navbar {width} {top} vertical fixed={$fixed} class="sidebar-{mode}">
 	<slot />
 </Navbar>

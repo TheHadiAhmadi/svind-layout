@@ -22,11 +22,13 @@ import { writable } from 'svelte/store';
     }
 
     const fixedStore = writable(fixed)
+	const sidebarWidth = writable(240)
+	const headerHeight = writable(80)
 
     $: $fixedStore = fixed
 	setContext('layout', { removeSidebar, removeHeader, registerHeader, registerSidebar, fixed: fixedStore });
 </script>
 
 <div class="d-page" class:dark data-layout-sidebar={hasSidebar} data-layout-header={hasHeader}>
-	<slot />
+	<slot {sidebarWidth} {headerHeight} />
 </div>
