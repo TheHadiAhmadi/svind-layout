@@ -6,8 +6,9 @@
 	import Sidebar from '$lib/components/Sidebar.svelte';
 import Drawer from '$lib/components/Drawer.svelte';
 
-import {sidebarWidth, headerHeight} from '$lib/stores'
+// import {sidebarWidth, headerHeight} from '$lib/stores'
 import { writable } from 'svelte/store';
+import Footer from '$lib/components/Footer.svelte';
 
 	let drawerWidth = writable(240);
 
@@ -19,11 +20,20 @@ import { writable } from 'svelte/store';
 	let hasSidebar = true;
 	let hasHeader = true;
 
-	$: sidebarMode = $sidebarWidth < 120 ? 'icon' : $sidebarWidth < 200 ? 'compact' : 'default' 
+	let footerFullWidth = false
+	let headerFullWidth = false
+
+	let sidebarWidth = 240;
+	let headerHeight = 64;
+	let footerHeight = 64;
+
+	$: sidebarMode = sidebarWidth < 120 ? 'icon' : sidebarWidth < 200 ? 'compact' : 'default' 
 
 </script>
+<!-- <slot/> -->
 
-<Page {dark} {fixed}>
+
+<Page {dark}>
 	<Drawer width={$drawerWidth} open={drawerOpen}>
 		<div class="flex justify-end">
 
@@ -53,19 +63,28 @@ import { writable } from 'svelte/store';
 			</FormGroup>
 
 			<label>
-				Sidebar: <input type="range" max="1000" bind:value={$sidebarWidth}>
+				Sidebar: <input type="range" max="1000" bind:value={sidebarWidth}>
 			</label>
 			<label>
 				Drawer: <input disabled type="range" max="1000" bind:value={$drawerWidth}>
 			</label>
 			<label>
-				Header: <input type="range" max="400" bind:value={$headerHeight}>
+				Header: <input type="range" max="400" bind:value={headerHeight}>
+			</label>
+			<label>
+				Header Full: <input type="checkbox" bind:checked={headerFullWidth}>
+			</label>
+			<label>
+				Footer: <input type="range" max="400" bind:value={footerHeight}>
+			</label>
+			<label>
+				Footer Full: <input type="checkbox" bind:checked={footerFullWidth}>
 			</label>
 
 		</div>
 	</Drawer>
 	{#if hasHeader}
-		<Header height={$headerHeight} class="flex items-center justify-between">
+		<Header fullWidth={headerFullWidth} {fixed} bind:height={headerHeight} class="flex items-center justify-between">
 			<Menu>
 				<MenuItem>item</MenuItem>
 				<MenuItem>item</MenuItem>
@@ -78,7 +97,7 @@ import { writable } from 'svelte/store';
 		</Header>
 	{/if}
 	{#if hasSidebar}
-		<Sidebar top={$headerHeight} width={$sidebarWidth} mode={sidebarMode}>
+		<Sidebar fullWidth={footerFullWidth} {fixed} dark bind:width={sidebarWidth} mode={sidebarMode}>
 			<Menu>
 				<MenuItem class="flex items-center {sidebarMode !== 'default' ? 'justify-center' : ''}">
 					<Icon icon="la:plane" />
@@ -92,7 +111,7 @@ import { writable } from 'svelte/store';
 		</Sidebar>
 	{/if}
 
-	<PageBody sidebarWidth={$sidebarWidth} headerHeight={$headerHeight}>
+	<PageBody>
 		<Card z="2">
 			<CardBody>
 				<label>
@@ -106,136 +125,8 @@ import { writable } from 'svelte/store';
 			</CardBody>
 		</Card>
 	</PageBody>
+
+	<Footer height={footerHeight} fullWidth={footerFullWidth}>
+		this is footer
+	</Footer>
 </Page>
-
-<style global>
-
-	.d-drawer {
-		padding: 16px;
-		position: fixed;
-		overflow: auto;
-		/* right: -240px; */
-		/* width: 240px; */
-		opacity: 0.5;
-		top: 0;
-		bottom: 0;
-		z-index: 1;
-		background-color: white;
-		transition: all 0.3s ease; 
-	}
-	.d-drawer.open {
-		right: 0 !important;
-		opacity: 1;
-		box-shadow: -2px 0 6px -4px  black;
-	}
-	.dark .d-drawer {
-		background-color: #303030;
-	}
-	.d-page {
-		position: relative;
-		overflow: hidden;
-		width: 100%;
-		min-height: 100vh;
-		background-color: #efefef;
-	}
-
-	.dark .d-page-body {
-		background-color: #202020;
-		color: white;
-	}
-
-	.d-page-body {
-		padding: 1rem;
-		transition: all 0.3s ease;
-	}
-
-	/* [data-layout-sidebar='icon'] .d-page-body {
-		margin-left: 60px;
-	}
-	[data-layout-sidebar='compact'] .d-page-body {
-		margin-left: 120px;
-	}
-	[data-layout-sidebar='default'] .d-page-body {
-		margin-left: 240px;
-	} */
-
-	[data-layout-header] .d-page-body {
-		transition: all 0.3s ease;
-	}
-
-	.d-navbar {
-		background-color: white;
-		transition: all 0.3s ease;
-	}
-
-	.dark .d-navbar {
-		background-color: #303030;
-		color: white;
-	}
-
-	.d-navbar:not(.vertical) {
-		position: absolute;
-		left: 0;
-		right: 0;
-		top: 0;
-		padding: 1rem;
-		/* height: 80px; */
-		box-shadow: 0 1px 0.2rem rgba(0, 0, 0, 0.555);
-	}
-
-	.d-navbar .menu {
-		flex-direction: row;
-	}
-
-	/* [data-layout-header] .d-navbar.vertical {
-		top: 80px;
-	} */
-
-	.d-navbar.vertical {
-		position: absolute;
-		box-shadow: 5px 0 4px -4px rgba(0, 0, 0, 0.555);
-		overflow: auto;
-		left: 0;
-		top: 0;
-		bottom: 0;
-	}
-
-	/* .sidebar-icon {
-		width: 60px;
-	}
-	.sidebar-default {
-		width: 240px;
-	}
-	.sidebar-compact {
-		width: 120px;
-	} */
-
-	.d-navbar.fixed {
-		position: fixed;
-	}
-
-	.d-navbar.vertical .menu {
-		flex-direction: column;
-	}
-
-	@media (max-width: 700px) {
-		.d-navbar.vertical:not(.open) {
-			padding-left: 0;
-			padding-right: 0;
-			opacity: 0.5;
-		}
-		.d-navbar.sidebar-default {
-			left: -240px;
-		}
-		.d-navbar.sidebar-compact {
-			left: -120px;
-		}
-		.d-navbar.sidebar-icon {
-			left: -60px;
-		}
-
-		[data-layout-sidebar] .d-page-body {
-			margin-left: 0;
-		}
-	}
-</style>

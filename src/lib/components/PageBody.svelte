@@ -1,14 +1,21 @@
-<script>
-    export let sidebarWidth = 0;
-    export let headerHeight = 0;
-
-
-    $: leftMargin = sidebarWidth > 0 ? `margin-left: ${sidebarWidth}px;` : ""
-    $: topMargin = headerHeight > 0 ? `margin-top: ${headerHeight}px;` : ""
-    $: style= leftMargin + topMargin
-
-    $: console.log(style)
-</script>
-<div class="d-page-body" {style}>
+<div class="d-page-body">
     <slot></slot>
 </div>
+
+<style global>
+
+	.d-page-body {
+        margin-left: var(--sidebar-width);
+        margin-top: var(--header-height);
+        margin-bottom: var(--footer-height);
+		padding: 1rem;
+        position: relative;
+        overflow: auto;
+		transition: all 0.3s ease;
+	}
+
+    .dark .d-page-body {
+		background-color: #202020;
+		color: white;
+	}
+</style>

@@ -5,23 +5,30 @@
 
     /** @type {'compact'|'icon'|'default'}*/
     export let mode = 'default';
+	export let width = 0;
 
-	export let width = 240;
-	export let top = 80;
+	export let fixed = false
 
-	const layout = getContext('layout');
-    
+	const {sidebarWidth, hasSidebar, hasHeader, hasFooter} =  getContext('layout')
 
-    $: fixed = layout.fixed
+	onMount(() => {
+		$hasSidebar = true
+	})
+	
+	onDestroy(() => {
+		$hasSidebar = false
+	})
+	
 
-	$: layout.registerSidebar(mode);
-
-onDestroy(() => {
-    layout.removeSidebar()
-})
-
+	$: style= [
+		$hasHeader !== 'full' ? "; --header-height: 0" : '',
+		$hasFooter !== 'full' ? "; --footer-height: 0" : '',
+		fixed && $hasFooter === 'full' ? "; --footer-height: 0" : '',
+	].join(';')
+	$: $sidebarWidth = width;
 </script>
 
-<Navbar {width} {top} vertical fixed={$fixed} class="sidebar-{mode}">
+
+<Navbar {fixed} style="bottom: var(--footer-height); top: var(--header-height); width: var(--sidebar-width); {style}" vertical class="sidebar-{mode}">
 	<slot />
 </Navbar>

@@ -1,28 +1,46 @@
 <script>
-import { getContext, onDestroy, onMount } from "svelte";
+	import { getContext, onDestroy, onMount } from 'svelte';
 
-import Navbar from "./Navbar.svelte";
+	import Navbar from './Navbar.svelte';
 
-let className = '';
-export {className as class}
+	const {hasHeader, headerHeight} = getContext('layout');
 
-export let height = 80;
+	let className = '';
+	export { className as class };
 
-const layout = getContext('layout')
-
-onMount(() => {
-    layout.registerHeader()
-})
+	export let height = 0;
+    export let fixed = false;
+    export let fullWidth = false;
 
 
-onDestroy(() => {
-    layout.removeHeader()
-})
+	onMount(() => {
+        $hasHeader = true
+	});
+    
+    
+	onDestroy(() => {
+        $hasHeader = false
+	});
+    
+    $: $headerHeight = height
+    $: $hasHeader = fullWidth ? 'full' : true
 
-$: fixed = layout.fixed;
-
- 
 </script>
-<Navbar {height} class={className} fixed={$fixed}>
-    <slot/>
+
+<Navbar class="{className} {fullWidth ? ' full ': ''}" {fixed}>
+	<slot />
 </Navbar>
+
+<style global>
+    .d-navbar:not(.vertical) {
+        z-index: 2;
+        height: var(--header-height);
+        left: var(--sidebar-width);
+    }
+
+    .d-navbar:not(.vertical).full {
+        left: 0;
+    }
+    
+
+</style>
