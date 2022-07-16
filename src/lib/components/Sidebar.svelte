@@ -4,7 +4,7 @@
 	import Navbar from './Navbar.svelte';
 
     /** @type {'compact'|'icon'|'default'}*/
-    export let mode = 'default';
+    // export let mode = 'default';
 	export let width = 0;
 
 	export let fixed = false
@@ -29,6 +29,6 @@
 </script>
 
 
-<Navbar {fixed} style="bottom: var(--footer-height); top: var(--header-height); width: var(--sidebar-width); {style}" vertical class="sidebar-{mode}">
+<Navbar {fixed} style="{style}" vertical>
 	<slot />
 </Navbar>

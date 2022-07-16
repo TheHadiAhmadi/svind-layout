@@ -24,6 +24,11 @@
 		transition: all 0.3s ease;
         z-index: 1;
 	}
+	.d-navbar.vertical {
+		bottom: var(--footer-height); 
+		top: var(--header-height); 
+		width: var(--sidebar-width); 
+	} 
 
 	.dark .d-navbar {
 		background-color: #303030;
@@ -48,8 +53,6 @@
 		box-shadow: 5px 0 4px -4px rgba(0, 0, 0, 0.555);
 		overflow: auto;
 		left: 0;
-		top: 0;
-		bottom: 0;
 	}
 
 	/* .sidebar-icon {
